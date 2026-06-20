@@ -1,16 +1,13 @@
-SHELL := /bin/zsh
-NVM_DIR := $(HOME)/.nvm
-
 install:
-	. $(NVM_DIR)/nvm.sh && npm ci
+	npm ci
 
 dev:
-	. $(NVM_DIR)/nvm.sh && npx vite
+	npx vite
 
 build:
-	. $(NVM_DIR)/nvm.sh && npx vite build
+	npx vite build
 
 lint:
-	. $(NVM_DIR)/nvm.sh && npx eslint .
+	npx eslint .
 
 .PHONY: install dev build lint
