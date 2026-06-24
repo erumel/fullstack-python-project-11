@@ -4,27 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RSS Reader</title>
-  <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
-  <div class="container mt-5">
-    <h1 class="mb-4">RSS Reader</h1>
-    <form id="rss-form" class="row g-3">
-      <div class="col-auto">
-        <label for="rss-input" class="visually-hidden">RSS ссылка</label>
+  <header class="bg-dark text-light pt-4">
+    <div class="container w-50">
+      <h1 class="mb-1">RSS агрегатор</h1>
+      <p class="my-1">Начните читать RSS сегодня! Это легко, это красиво.</p>
+      <form class="d-flex align-items-stretch gap-2" novalidate>
+        <label for="url-input" class="visually-hidden">Ссылка RSS</label>
         <input 
-          type="text" 
-          class="form-control" 
-          id="rss-input" 
-          placeholder="Введите RSS-ссылку"
+          class="w-75"
+          type="url"
+          id="url-input" 
+          placeholder="Ссылка RSS" 
           required
         >
-      </div>
-      <div class="col-auto">
-        <button type="submit" class="btn btn-primary">Добавить</button>
-      </div>
-    </form>
-  </div>
-  <script type="module" src="/src/main.js"></script>
+        <button type="submit" class="btn btn-primary w-25 bg-light text-dark border-0 ms-auto" >Добавить</button>
+      </form>
+      <p  class="text-secondary mb-0 mt-1">Пример: https://lorem-rss.hexlet.app/feed</p>
+      <p  class="status-info pb-1 text-danger" style="min-height: 2rem;"></p>
+    </div>
+  </header>
+   <script type="module" src="/src/main.js"></script>
 </body>
 </html>
