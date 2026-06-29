@@ -1,13 +1,18 @@
 import { proxy } from 'valtio/vanilla'
+import i18nInstance from './locales/index.js'
 
-const state = proxy({
-  urls: [],
+const bundle = i18nInstance.getResourceBundle(i18nInstance.language, 'translation')
+
+export const state = proxy({
   form: {
-    url: '',
-    error: null,
-    valid: null,
-    success: 'RSS успешно загружен',
+    url: null,
+    isValid: {
+      value: null,
+    },
   },
+  urls: [],
 })
-
-export default state
+export const status = proxy({
+  success: bundle.status.success,
+  error: null,
+})

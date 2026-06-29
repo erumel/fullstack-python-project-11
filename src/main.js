@@ -1,17 +1,31 @@
 import './style.css'
-import { validate } from './validate.js'
-import { setFormUrl, setFormValidation } from './view.js'
-import state from './state.js'
+import init from './view.js'
+import { validate } from './validation/validator.js'
+import { state, status } from './state.js'
+
+init()
 
 const form = document.querySelector('form')
-const input = form.querySelector('#url-input')
+const input = document.querySelector('#rss-input')
 
 form.addEventListener('submit', (e) => {
   e.preventDefault()
-  const url = input.value.trim()
-  setFormUrl(url)
-
-  validate(url, state.urls).then((result) => {
-    setFormValidation(result)
+  validate().then(() => {
+    state.form.isValid.value = true
+    state.urls.push(state.form.url)
+    state.form.url = null
   })
+    .catch((error) => {
+      status.error = error.message
+      state.form.isValid.value = false
+    })
+})
+
+input.addEventListener('input', (e) => {
+  e.target.value = e.target.value.trim()
+  state.form.url = e.target.value
+  if (state.form.isValid.value === false) {
+    state.error = null
+    state.form.isValid.value = null
+  }
 })
