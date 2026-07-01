@@ -6,6 +6,7 @@ const bundle = i18nInstance.getResourceBundle(i18nInstance.language, 'translatio
 export const state = proxy({
   form: {
     url: null,
+    isSubmitting: false,
     isValid: {
       value: null,
     },
