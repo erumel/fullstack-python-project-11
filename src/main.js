@@ -3,6 +3,7 @@ import './view.js'
 import state from './state.js'
 import { validateUrl } from './validate.js'
 import initTexts from './initTexts.js'
+import { fetchRSS } from './api.js'
 
 initTexts()
 
@@ -17,14 +18,22 @@ form.addEventListener('submit', (e) => {
   const existingUrls = state.feeds.map(feed => feed.url)
 
   validateUrl(url, existingUrls)
+    .then(() => fetchRSS(url))
     .then(() => {
       state.form.error = null
       state.form.status = 'success'
-      state.feeds.push({ url: url })
       form.reset()
     })
     .catch((err) => {
-      state.form.error = err.message
+      if (err.message === 'invalidRss') {
+        state.form.error = 'invalidRss'
+      }
+      else if (err.isAxiosError) {
+        state.form.error = 'network'
+      }
+      else {
+        state.form.error = err.message
+      }
       state.form.status = null
     })
     .finally(() => {

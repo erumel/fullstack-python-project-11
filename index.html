@@ -10,30 +10,30 @@
   <header class="container-fluid bg-dark text-light">
     <div class="row">
       <div class="col-8 mx-auto">
-        <h1 class="mt-3">RSS агрегатор</h1>
-        <p class="p-0">Начните читать RSS сегодня! Это легко, это красиво.</p>
+        <h1 data-i18n="header.title" class="mt-3">RSS агрегатор</h1>
+        <p data-i18n="header.tagline" class="p-0">Начните читать RSS сегодня! Это легко, это красиво.</p>
         <form id="rss-form" class="row mb-1" novalidate>
           <div class="col-9">
-            <label for="rss-input" class="visually-hidden">Ссылка RSS</label>
-            <input id="rss-input" name="rss-input" type="url" class="form-control w-100" placeholder="Ссылка RSS">
+            <label for="rss-input" data-i18n="form.label" class="visually-hidden">Ссылка RSS</label>
+            <input id="rss-input" data-i18n-placeholder="form.placeholder" name="rss-input" type="url" class="form-control w-100" placeholder="Ссылка RSS">
           </div>
           <div class="col-3 m-0">
-            <button id="rss-submit-btn" type="submit" class="btn btn-primary w-100 text-truncate">Добавить</button>
+            <button id="rss-submit-btn" data-i18n="form.button" type="submit" class="btn btn-primary w-100 text-truncate">Добавить</button>
           </div>
         </form>
-        <small class="my-0 text-secondary">Пример: https://lorem-rss.hexlet.app/feed</small>
+        <small data-i18n="form.example" class="my-0 text-secondary">Пример: https://lorem-rss.hexlet.app/feed</small>
         <p id="status" role="status" class="mb-1" style="min-height: 1.5em; line-height: 1.5em"></p>
       </div>
     </div>
   </header>
   <main class="container pt-3">
-    <div class="row">
+    <div class="row g-4">
       <section class="col-8">
-        <h4>Посты</h4>
+        <h4 data-i18n="sections.posts">Посты</h4>
         <div id="posts-container"></div>
       </section>
       <section class="col-4">
-        <h4>Фиды</h4>
+        <h4 data-i18n="sections.feeds">Фиды</h4>
         <div id="feeds-container"></div>
       </section>
     </div>
