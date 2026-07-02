@@ -1,4 +1,5 @@
 import { subscribe } from 'valtio/vanilla'
+import { Modal } from 'bootstrap'
 import state from './state.js'
 import i18next from './locales/index.js'
 
@@ -7,6 +8,10 @@ const status = document.getElementById('status')
 const button = document.getElementById('rss-submit-btn')
 const feedsContainer = document.getElementById('feeds-container')
 const postsContainer = document.getElementById('posts-container')
+const modal = document.getElementById('post-modal')
+const modalTitle = document.getElementById('modal-title')
+const modalDescription = document.getElementById('modal-description')
+const modalLink = document.getElementById('modal-link')
 
 const renderFeeds = () => {
   feedsContainer.innerHTML = ''
@@ -26,15 +31,40 @@ const renderFeeds = () => {
 const renderPosts = () => {
   postsContainer.innerHTML = ''
   state.posts.forEach((post) => {
+    const isRead = state.ui.readPosts.has(post.id)
     const item = document.createElement('div')
     item.className = 'd-flex justify-content-between align-items-start mb-1'
 
     item.innerHTML = `
-      <a href="${post.link}" target="_blank" rel="noopener noreferrer">${post.title}</a>
-      <button class="btn btn-outline-primary btn-sm ms-3 flex-shrink-0" data-post-id="${post.id}">${i18next.t('actions.view')}</button>
+      <a href="${post.link}" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         class="${isRead ? 'fw-normal' : 'fw-bold'}">
+        ${post.title}
+      </a>
+      <button class="btn btn-outline-primary btn-sm ms-3 flex-shrink-0" 
+              data-post-id="${post.id}"
+              data-action="preview">
+        ${i18next.t('actions.view')}
+      </button>
     `
     postsContainer.appendChild(item)
   })
+}
+
+const renderModal = () => {
+  const postId = state.ui.modalPostId
+  if (postId === null) return
+
+  const post = state.posts.find(p => p.id === postId)
+  if (!post) return
+
+  modalTitle.textContent = post.title
+  modalDescription.textContent = post.description || ''
+  modalLink.href = post.link
+
+  const bsModal = new Modal(modal)
+  bsModal.show()
 }
 
 subscribe(state.form, () => {
@@ -64,5 +94,20 @@ subscribe(state.form, () => {
 })
 
 subscribe(state.feeds, renderFeeds)
-
 subscribe(state.posts, renderPosts)
+subscribe(state.ui, () => {
+  if (state.ui.modalPostId !== null) renderModal()
+})
+
+postsContainer.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-action="preview"]')
+  if (!btn) return
+
+  const postId = btn.dataset.postId
+  state.ui.readPosts.add(postId)
+  state.ui.modalPostId = postId
+})
+
+modal.addEventListener('hidden.bs.modal', () => {
+  state.ui.modalPostId = null
+})

@@ -19,6 +19,7 @@ const parseRSS = (xmlString) => {
   const items = [...channel.querySelectorAll('item')].map(item => ({
     title: item.querySelector('title').textContent,
     link: item.querySelector('link').textContent,
+    description: item.querySelector('description')?.textContent || '',
   }))
 
   return { title, description, items }
@@ -30,6 +31,7 @@ export const fetchRSS = (url) => {
     .then(({ title, description, items }) => {
       const feedId = addFeed(url, title, description)
       addPosts(feedId, items)
+      return feedId
     })
 }
 

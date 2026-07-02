@@ -8,6 +8,10 @@ const state = proxy({
   },
   feeds: [],
   posts: [],
+  ui: {
+    readPosts: new Set(),
+    modalPostId: null,
+  },
 })
 
 export const addFeed = (url, title, description) => {
@@ -23,6 +27,7 @@ export const addPosts = (feedId, items) => {
       feedId,
       title: item.title,
       link: item.link,
+      description: item.description || '',
     })
   })
 }

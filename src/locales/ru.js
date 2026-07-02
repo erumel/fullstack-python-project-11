@@ -26,6 +26,8 @@ export default {
     },
     actions: {
       view: 'Просмотр',
+      close: 'Закрыть',
+      readFull: 'Читать полностью',
     },
   },
 }
