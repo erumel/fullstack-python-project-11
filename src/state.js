@@ -1,5 +1,7 @@
 import { proxy } from 'valtio/vanilla'
 
+const generateId = () => Math.random().toString(36).substring(2, 10) + Date.now().toString(36)
+
 const state = proxy({
   form: {
     error: null, // null | 'empty' | 'invalid' | 'duplicate' | 'network'
@@ -16,7 +18,7 @@ const state = proxy({
 })
 
 export const addFeed = (url, title, description) => {
-  const feed = { id: crypto.randomUUID(), url, title, description }
+  const feed = { id: generateId(), url, title, description }
   state.feeds.push(feed)
   return feed.id
 }
@@ -24,7 +26,7 @@ export const addFeed = (url, title, description) => {
 export const addPosts = (feedId, items) => {
   items.forEach((item) => {
     state.posts.push({
-      id: crypto.randomUUID(),
+      id: generateId(),
       feedId,
       title: item.title,
       link: item.link,
