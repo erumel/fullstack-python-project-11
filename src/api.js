@@ -13,12 +13,16 @@ const parseRSS = (xmlString) => {
   }
 
   const channel = doc.querySelector('channel')
-  const title = channel.querySelector('title').textContent
-  const description = channel.querySelector('description').textContent
+  if (!channel) {
+    throw new Error('invalidRss')
+  }
+
+  const title = channel.querySelector('title')?.textContent || ''
+  const description = channel.querySelector('description')?.textContent || ''
 
   const items = [...channel.querySelectorAll('item')].map(item => ({
-    title: item.querySelector('title').textContent,
-    link: item.querySelector('link').textContent,
+    title: item.querySelector('title')?.textContent || '',
+    link: item.querySelector('link')?.textContent || '',
     description: item.querySelector('description')?.textContent || '',
   }))
 
