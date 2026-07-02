@@ -5,7 +5,7 @@
 Application deployed on Vercel: [https://fullstack-python-project-11.vercel.app](https://fullstack-python-project-11.vercel.app)
 
 ## Description
-RSS Reader — a web application for reading RSS feeds.
+RSS Reader — a web application for reading RSS feeds
 
 ## Setup
 ```bash
