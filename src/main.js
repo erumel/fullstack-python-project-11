@@ -4,11 +4,14 @@ import state from './state.js'
 import { validateUrl } from './validate.js'
 import initTexts from './initTexts.js'
 import { fetchRSS } from './api.js'
+import scheduleUpdate from './updater.js'
 
 initTexts()
 
 const form = document.getElementById('rss-form')
 const input = document.getElementById('rss-input')
+
+state.feeds.forEach(feed => scheduleUpdate(feed))
 
 form.addEventListener('submit', (e) => {
   e.preventDefault()
@@ -19,10 +22,12 @@ form.addEventListener('submit', (e) => {
 
   validateUrl(url, existingUrls)
     .then(() => fetchRSS(url))
-    .then(() => {
+    .then((feedId) => {
       state.form.error = null
       state.form.status = 'success'
       form.reset()
+      const feed = state.feeds.find(f => f.id === feedId)
+      if (feed) scheduleUpdate(feed)
     })
     .catch((err) => {
       if (err.message === 'invalidRss') {

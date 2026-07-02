@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { addFeed, addPosts } from './state.js'
+import state, { addFeed, addPosts } from './state.js'
 
 const PROXY_URL = 'https://allorigins.hexlet.app/get?disableCache=true&url='
 
@@ -30,5 +30,21 @@ export const fetchRSS = (url) => {
     .then(({ title, description, items }) => {
       const feedId = addFeed(url, title, description)
       addPosts(feedId, items)
+    })
+}
+
+export const fetchNewPosts = (feed) => {
+  return axios.get(`${PROXY_URL}${encodeURIComponent(feed.url)}`)
+    .then(response => parseRSS(response.data.contents))
+    .then(({ items }) => {
+      const existingLinks = new Set(
+        state.posts
+          .filter(p => p.feedId === feed.id)
+          .map(p => p.link),
+      )
+      const newItems = items.filter(item => !existingLinks.has(item.link))
+      if (newItems.length > 0) {
+        addPosts(feed.id, newItems)
+      }
     })
 }
