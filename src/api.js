@@ -29,19 +29,20 @@ const parseRSS = (xmlString) => {
   return { title, description, items }
 }
 
-export const fetchRSS = (url) => {
-  return axios.get(`${PROXY_URL}${encodeURIComponent(url)}`)
+const fetchFromProxy = url =>
+  axios.get(`${PROXY_URL}${encodeURIComponent(url)}`)
     .then(response => parseRSS(response.data.contents))
+
+export const fetchRSS = url =>
+  fetchFromProxy(url)
     .then(({ title, description, items }) => {
       const feedId = addFeed(url, title, description)
       addPosts(feedId, items)
       return feedId
     })
-}
 
-export const fetchNewPosts = (feed) => {
-  return axios.get(`${PROXY_URL}${encodeURIComponent(feed.url)}`)
-    .then(response => parseRSS(response.data.contents))
+export const fetchNewPosts = feed =>
+  fetchFromProxy(feed.url)
     .then(({ items }) => {
       const existingLinks = new Set(
         state.posts
@@ -53,4 +54,3 @@ export const fetchNewPosts = (feed) => {
         addPosts(feed.id, newItems)
       }
     })
-}

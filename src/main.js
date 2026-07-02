@@ -25,12 +25,11 @@ form.addEventListener('submit', (e) => {
     .then((feedId) => {
       state.form.error = null
       state.form.status = 'success'
-      input.value = ''
+      form.reset()
       const feed = state.feeds.find(f => f.id === feedId)
       if (feed) scheduleUpdate(feed)
     })
     .catch((err) => {
-      console.error('Submit error:', err.message, err.isAxiosError)
       if (err.message === 'invalidRss') {
         state.form.error = 'invalidRss'
       }
