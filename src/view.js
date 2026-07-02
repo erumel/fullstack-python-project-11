@@ -65,7 +65,11 @@ const renderModal = () => {
   if (!post) return
 
   modalTitle.textContent = post.title
-  modalDescription.textContent = post.description || ''
+  modalDescription.innerHTML = post.description || ''
+  modalDescription.querySelectorAll('img').forEach((img) => {
+    img.classList.add('img-fluid', 'd-block', 'mx-auto', 'mb-2')
+  })
+  modalDescription.style.textAlign = 'justify'
   modalLink.href = post.link
 
   const bsModal = new Modal(modal)
