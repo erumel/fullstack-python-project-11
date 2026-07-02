@@ -1,19 +1,10 @@
 import { proxy } from 'valtio/vanilla'
-import i18nInstance from './locales/index.js'
 
-const bundle = i18nInstance.getResourceBundle(i18nInstance.language, 'translation')
-
-export const state = proxy({
+export default proxy({
   form: {
-    url: null,
+    error: null, // null | 'empty' | 'invalid' | 'duplicate' | 'network'
+    status: null, // null | 'success'
     isSubmitting: false,
-    isValid: {
-      value: null,
-    },
   },
-  urls: [],
-})
-export const status = proxy({
-  success: bundle.status.success,
-  error: null,
+  feeds: [],
 })

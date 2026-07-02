@@ -1,13 +1,9 @@
 import i18next from 'i18next'
-import { ru } from './ru.js'
+import ru from './ru.js'
 
-const i18nInstance = i18next.createInstance()
-
-i18nInstance.init({
+i18next.init({
   lng: 'ru',
-  resources: {
-    ru,
-  },
+  resources: { ru },
 })
 
-export default i18nInstance
+export default i18next

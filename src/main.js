@@ -1,44 +1,51 @@
-import './style.css'
-import init from './view.js'
-import { validateURL } from './validation/validators.js'
-import { state, status } from './state.js'
+import './styles/main.css'
+import './view.js'
+import state from './state.js'
+import { validateUrl } from './validate.js'
+import initTexts from './initTexts.js'
 
-init()
+initTexts()
 
-const form = document.querySelector('form')
+const form = document.getElementById('rss-form')
 const input = document.getElementById('rss-input')
 
 form.addEventListener('submit', (e) => {
   e.preventDefault()
   state.form.isSubmitting = true
 
-  validateURL(state.form.url).then(() => {
-    state.form.isValid.value = true
-    state.urls.push(state.form.url)
-    state.form.url = null
-  })
-    .catch((error) => {
-      status.error = error.message
-      state.form.isValid.value = false
+  const url = input.value
+  const existingUrls = state.feeds.map(feed => feed.url)
+
+  validateUrl(url, existingUrls)
+    .then(() => {
+      state.form.error = null
+      state.form.status = 'success'
+      state.feeds.push({ url: url })
+      form.reset()
+    })
+    .catch((err) => {
+      state.form.error = err.message
+      state.form.status = null
+    })
+    .finally(() => {
+      input.focus()
+      state.form.isSubmitting = false
     })
 })
 
-input.addEventListener('input', (e) => {
-  e.target.value = e.target.value.trim()
-  state.form.url = e.target.value
-  if (state.form.isValid.value === false) {
-    status.error = null
-    state.form.isValid.value = null
+input.addEventListener('input', () => {
+  input.value = input.value.replace(/\s/g, '')
+  if (state.form.error || state.form.status) {
+    state.form.error = null
+    state.form.status = null
   }
 })
 
 input.addEventListener('blur', (e) => {
-  if (state.form.isSubmitting) {
-    state.form.isSubmitting = false
+  if (input.value === '' && e.relatedTarget?.closest('#rss-form')) {
     return
   }
-  if (e.target.value === '') {
-    status.error = null
-    state.form.isValid.value = null
+  if (input.value === '') {
+    state.form.error = null
   }
 })

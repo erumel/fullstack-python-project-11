@@ -1,53 +1,33 @@
-import i18nInstance from './locales/index.js'
-import { kebabCase } from 'lodash'
-import { state, status } from './state.js'
 import { subscribe } from 'valtio/vanilla'
+import state from './state.js'
+import i18next from './locales/index.js'
 
-function initHeader() {
-  const header = document.querySelector('header')
-  const bundle = i18nInstance.getResourceBundle(i18nInstance.language, 'translation')
+const input = document.getElementById('rss-input')
+const status = document.getElementById('status')
+const button = document.getElementById('rss-submit-btn')
 
-  Object.keys(bundle.header).forEach((key) => {
-    const el = header.querySelector(`#${kebabCase(key)}`)
-    if (!el) return
-    const text = i18nInstance.t(`header.${key}`)
-    if (el.tagName === 'INPUT') {
-      el.placeholder = text
-      el.focus()
-    }
-    else {
-      el.textContent = text || ''
-    }
-  })
-}
+subscribe(state.form, () => {
+  const { error, status: formStatus, isSubmitting } = state.form
 
-function updateStatus() {
-  const pStatus = document.getElementById('status')
-  const input = document.getElementById('rss-input')
-
-  switch (state.form.isValid.value) {
-    case true:
-      input.classList.remove('is-invalid')
-      input.value = ''
-      pStatus.textContent = status.success
-      pStatus.className = 'mb-2 text-success'
-      input.focus()
-      break
-    case false:
-      pStatus.textContent = status.error
-      pStatus.className = 'mb-2 text-danger'
-      input.classList.add('is-invalid')
-      input.focus()
-      break
-    default:
-      input.classList.remove('is-invalid')
-      pStatus.textContent = null
-      pStatus.className = 'mb-2'
+  if (error) {
+    input.classList.add('is-invalid')
+    input.classList.remove('is-valid')
+    status.textContent = i18next.t(`errors.${error}`)
+    status.classList.add('text-danger')
+    status.classList.remove('text-success')
   }
-}
+  else if (formStatus === 'success') {
+    input.classList.remove('is-invalid')
+    input.classList.add('is-valid')
+    status.textContent = i18next.t('success')
+    status.classList.add('text-success')
+    status.classList.remove('text-danger')
+  }
+  else {
+    input.classList.remove('is-invalid', 'is-valid')
+    status.textContent = ''
+    status.classList.remove('text-danger', 'text-success')
+  }
 
-subscribe(state.form.isValid, updateStatus)
-
-export default function init() {
-  initHeader()
-}
+  button.disabled = isSubmitting
+})
