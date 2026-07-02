@@ -2,11 +2,10 @@ import { fetchNewPosts } from './api.js'
 import state from './state.js'
 
 const UPDATE_INTERVAL = 5000
-const scheduledFeeds = new Set()
 
 const scheduleUpdate = (feed) => {
-  if (scheduledFeeds.has(feed.id)) return
-  scheduledFeeds.add(feed.id)
+  if (state.ui.scheduledFeeds.has(feed.id)) return
+  state.ui.scheduledFeeds.add(feed.id)
 
   const update = () => {
     setTimeout(() => {
@@ -18,7 +17,7 @@ const scheduleUpdate = (feed) => {
             update()
           }
           else {
-            scheduledFeeds.delete(feed.id)
+            state.ui.scheduledFeeds.delete(feed.id)
           }
         })
     }, UPDATE_INTERVAL)

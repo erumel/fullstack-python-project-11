@@ -31,13 +31,15 @@ const renderFeeds = () => {
 const renderPosts = () => {
   postsContainer.innerHTML = ''
   state.posts.forEach((post) => {
+    const isRead = state.ui.readPosts.has(post.id)
     const item = document.createElement('div')
     item.className = 'd-flex justify-content-between align-items-start mb-1'
 
     item.innerHTML = `
       <a href="${post.link}" 
-        target="_blank" 
-        rel="noopener noreferrer">
+         target="_blank" 
+         rel="noopener noreferrer"
+         class="${isRead ? 'fw-normal' : 'fw-bold'}">
         ${post.title}
       </a>
       <button class="btn btn-outline-primary btn-sm ms-3 flex-shrink-0" 

@@ -23,9 +23,9 @@ form.addEventListener('submit', (e) => {
   validateUrl(url, existingUrls)
     .then(() => fetchRSS(url))
     .then((feedId) => {
-      state.form.error = null
       state.form.status = 'success'
       form.reset()
+      state.form.error = null
       const feed = state.feeds.find(f => f.id === feedId)
       if (feed) scheduleUpdate(feed)
     })

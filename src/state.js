@@ -11,6 +11,7 @@ const state = proxy({
   ui: {
     readPosts: new Set(),
     modalPostId: null,
+    scheduledFeeds: new Set(),
   },
 })
 
