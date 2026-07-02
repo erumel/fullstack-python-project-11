@@ -30,9 +30,12 @@ const renderFeeds = () => {
 
 const renderPosts = () => {
   postsContainer.innerHTML = ''
+  const list = document.createElement('ul')
+  list.className = 'list-unstyled mb-0'
+
   state.posts.forEach((post) => {
     const isRead = state.ui.readPosts.has(post.id)
-    const item = document.createElement('div')
+    const item = document.createElement('li')
     item.className = 'd-flex justify-content-between align-items-start mb-1'
 
     item.innerHTML = `
@@ -48,8 +51,10 @@ const renderPosts = () => {
         ${i18next.t('actions.view')}
       </button>
     `
-    postsContainer.appendChild(item)
+    list.appendChild(item)
   })
+
+  postsContainer.appendChild(list)
 }
 
 const renderModal = () => {
