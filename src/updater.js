@@ -13,7 +13,8 @@ const scheduleUpdate = (feed) => {
       fetchNewPosts(feed)
         .catch(() => {})
         .finally(() => {
-          if (state.feeds.some(f => f.id === feed.id)) {
+          const feedExist = state.feeds.some(f => f.id === feed.id)
+          if (feedExist) {
             update()
           }
           else {
