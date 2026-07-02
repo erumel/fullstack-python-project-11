@@ -1,11 +1,10 @@
 import { proxy } from 'valtio/vanilla'
-
-const generateId = () => Math.random().toString(36).substring(2, 10) + Date.now().toString(36)
+import { nanoid } from 'nanoid'
 
 const state = proxy({
   form: {
-    error: null, // null | 'empty' | 'invalid' | 'duplicate' | 'network'
-    status: null, // null | 'success'
+    error: null,
+    status: null,
     isSubmitting: false,
   },
   feeds: [],
@@ -18,7 +17,7 @@ const state = proxy({
 })
 
 export const addFeed = (url, title, description) => {
-  const feed = { id: generateId(), url, title, description }
+  const feed = { id: nanoid(), url, title, description }
   state.feeds.push(feed)
   return feed.id
 }
@@ -26,7 +25,7 @@ export const addFeed = (url, title, description) => {
 export const addPosts = (feedId, items) => {
   items.forEach((item) => {
     state.posts.push({
-      id: generateId(),
+      id: nanoid(),
       feedId,
       title: item.title,
       link: item.link,
